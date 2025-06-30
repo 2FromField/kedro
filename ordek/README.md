@@ -102,6 +102,14 @@ To automatically strip out all output cell contents before committing to `git`, 
 
 
 ## Convert kedro pipeline TO airflow DAG
+Pré-requis dans le fichier ".env":
+```
+MONGO_USERNAME=XXXX
+MONGO_PASSWORD=XXXX
+MONGO_DBNAME=XXXX
+MONGO_URI=XXXX
+API_URL=https://opendata.paris.fr/api/explore/v2.1/catalog/datasets/belib-points-de-recharge-pour-vehicules-electriques-donnees-statiques/records?
+```
 1. Créer le dag depuis la pipeline kedro: `kedro airflow create --target-dir=dags/ --env=airflow`
 2. Récupérer le mdp du service airflow: `export AIRFLOW_HOME=$(pwd)`
 3. Instancié la bd airflow: `airflow db migrate`
