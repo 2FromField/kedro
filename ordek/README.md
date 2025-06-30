@@ -99,3 +99,22 @@ To automatically strip out all output cell contents before committing to `git`, 
 ## Package your Kedro project
 
 [Further information about building project documentation and packaging your project](https://docs.kedro.org/en/stable/tutorial/package_a_project.html)
+
+
+## Convert kedro pipeline TO airflow DAG
+1. Créer le dag depuis la pipeline kedro: `kedro airflow create --target-dir=dags/ --env=airflow`
+2. Récupérer le mdp du service airflow: `export AIRFLOW_HOME=$(pwd)`
+3. Instancié la bd airflow: `airflow db migrate`
+4. Lancer le localhost: `airflow standalone`
+5. Accorder l'accès à la racine du projet: `pip install -e .`
+6. Ajouter la configuration airflow: `cp -r conf/base conf/airflow`
+7. Ajouter des packages: `pip install "kedro-datasets[json]"` & `pip install kedro-datasets` & `pip install pandas`
+8. Ajouant la logique du flux de données dans "conf > airflow > catalog.yaml":
+```
+raw_data:
+  type: json.JSONDataset  # ✅ au lieu de pandas.JSONDataset
+  filepath: data/01_raw/raw_data.json
+cleaned_data:
+  type: json.JSONDataset
+  filepath: data/02_intermediate/cleaned_data.json
+```
